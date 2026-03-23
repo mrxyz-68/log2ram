@@ -1,29 +1,33 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-if [[ "$(id -u)" -ne 0 ]]; then
-    echo "You need to be ROOT (sudo can be used)"
-    exit 1
+[ "$(id -u)" -eq 0 ] || { echo "You need to be ROOT (sudo can be used)"; exit 1; }
+
+# See if we can find out the init-system
+echo "Try to detect init..."
+if [ "$(systemctl --version)" != '' ] ; then
+  INIT='systemd'
+elif [ "$(rc-service --version)" != '' ] ; then
+  INIT='openrc'
 fi
 
-if dpkg -l log2ram 2>/dev/null; then
-    echo "Please run: apt remove log2ram"
-    exit 1
+if [ "$INIT" = 'systemd' ] ; then
+  service log2ram stop
+  systemctl disable log2ram
+  rm /etc/systemd/system/log2ram.service
+elif [ "$INIT" = 'openrc' ] ; then
+  rc-service log2ram stop
+  rc-update del log2ram boot
+  rm /etc/init.d/log2ram
 fi
 
-echo "Not apt installed. Remove will continue with this script..."
+rm /usr/local/bin/log2ram
+rm /etc/log2ram.conf
+rm /etc/cron.daily/log2ram
+rm /etc/logrotate.d/log2ram
 
-systemctl stop log2ram.service log2ram-daily.timer
-systemctl disable log2ram.service log2ram-daily.timer
-
-rm -rf /etc/systemd/system/log2ram*
-rm -f /usr/local/bin/log2ram
-rm -f /etc/log2ram.conf
-rm -f /etc/logrotate.d/log2ram
-
-if [[ -d /var/hdd.log ]]; then
-    rm -rf /var/hdd.log
+if [ -d /var/hdd.log ]; then
+  rm -r /var/hdd.log
 fi
-
 echo "Log2Ram is uninstalled, removing the uninstaller in progress"
-rm -f /usr/local/bin/uninstall-log2ram.sh
+rm /usr/local/bin/uninstall-log2ram.sh
 echo "##### Reboot isn't needed #####"
