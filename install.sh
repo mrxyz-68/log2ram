@@ -39,7 +39,7 @@ fi
 if [ "$INIT" = 'systemd' ] ; then
   install -m 755 log2ram.cron /etc/cron.daily/log2ram
 elif [ "$INIT" = 'openrc' ] ; then
-  install -m 755 log2ram.openrc_cron /etc/cron.daily/log2ram
+  install -m 755 log2ram-cron.sh /etc/cron.daily/log2ram
 fi
 install -m 644 log2ram.logrotate /etc/logrotate.d/log2ram
 
