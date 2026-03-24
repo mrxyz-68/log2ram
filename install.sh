@@ -2,7 +2,7 @@
 
 [ "$(id -u)" -eq 0 ] || { echo 'You need to be ROOT (sudo can be used)' ; exit 1 ;}
 
-. /log2ram.conf  # Include config to check if size is enought (See below) 
+. ./log2ram.conf  # Include config to check if size is enough (See below) 
 
 # See if we can find out the init-system
 echo 'Try to detect init and running log2ram service...'
