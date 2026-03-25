@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+set -x
+
 [ "$(id -u)" -eq 0 ] || { echo 'You need to be ROOT (sudo can be used)' ; exit 1 ;}
 
 . ./log2ram.conf  # Include config to check if size is enough (See below)
@@ -26,7 +28,7 @@ echo "Installing log2ram for $INIT init-system"
 mkdir -p /usr/local/bin/
 install -m 755 log2ram /usr/local/bin/log2ram
 install -m 644 log2ram.conf /etc/log2ram.conf
-install -m 644 uninstall.sh /usr/local/bin/uninstall-log2ram.sh
+install -m 755 uninstall.sh /usr/local/bin/uninstall-log2ram.sh
 if [ "$INIT" = 'systemd' ] ; then
   install -m 644 log2ram.service /etc/systemd/system/log2ram.service
   systemctl enable log2ram
