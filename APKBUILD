@@ -3,7 +3,7 @@
 pkgname=log2ram
 pkgver=0.1
 pkgrel=0
-pkgdesc="log2ram ramlog for openrc"
+pkgdesc="log2ram for alpine linux"
 url="https://github.com/mrxyz-68/log2ram"
 arch="all"
 license="MIT"
@@ -14,7 +14,7 @@ options="!check"
 install="$pkgname.post-install"
 #subpackages="$pkgname-dev $pkgname-doc"
 source="
-    "$pkgname-$pkgver".tar.gz::https://github.com/mrxyz-68/log2ram/archive/master.tar.gz
+    "$pkgname-$pkgver".tar.gz::https://github.com/mrxyz-68/log2ram/archive/apk.tar.gz
     log2ram.initd
 	log2ram.confd
     "
@@ -22,13 +22,13 @@ source="
 builddir="$srcdirr/"
 
 package() {
-    install -m755 -D "$srcdir"/$pkgname-master/$pkgname \
+    install -m755 -D "$srcdir"/$pkgname-apk/$pkgname \
         "$pkgdir"/usr/bin/$pkgname
 #    install -m755 -D "$srcdir"/$pkgname-master/$pkgname-uninstall.sh \
 #        "$pkgdir"/usr/bin/$pkgname-uninstall.sh
 #    install -m755 -D "$srcdir"/$pkgname-master/$pkgname-cron.sh \
 #        "$pkgdir"/etc/cron.d/$pkgname
-    install -m644 -D "$srcdir"/$pkgname-master/$pkgname.logrotate \
+    install -m644 -D "$srcdir"/$pkgname-apk/$pkgname.logrotate \
         "$pkgdir"/etc/logrotate.d/$pkgname
 	install -m755 -D "$srcdir"/$pkgname.initd \
 		"$pkgdir"/etc/init.d/$pkgname
